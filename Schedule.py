@@ -18,3 +18,9 @@ option = webdriver.ChromeOptions()
 option.add_argument(f'user-agent={useragent.chrome}')
 driver = webdriver.Chrome(options = option)
 url = 'https://timetable.vsuet.ru/'
+
+"""
+Выбирать расписание на день, неделю, 
+выгружать это в excel файл, узнавать есть ли изменения в расписание,
+узнавать какая пара будет у другой группы
+"""
