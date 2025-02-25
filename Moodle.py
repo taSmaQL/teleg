@@ -79,12 +79,22 @@ def open_parser():
     place_left(matan_entry, y_offset=360)
 
     start_button = tk.Button(parser_window, text="Начать парсинг", command=start_parsing, width=15, height=2)
-    place_left(start_button, y_offset=400, x_offset=150)
-
+    place_left(start_button, y_offset=330, x_offset=200)
+    
     parser_window.mainloop()
 
 def auth_fun():
     messagebox.showinfo("Авторизация", "Добро пожаловать! \n\nПароль: 12345\n(шутка)")
+
+def open_schedule():
+    schedule_window = tk.Toplevel()
+    schedule_window.title("Расписание")
+    schedule_window.geometry("300x200")
+
+    schedule_text = ""
+
+    schedule_label = tk.Label(schedule_window, text=schedule_text, justify=tk.LEFT)
+    schedule_label.pack(pady=20)
 
 root = tk.Tk()
 root.title("Главное меню")
@@ -98,6 +108,9 @@ auth_button.pack(pady=10)
 
 parser_button = tk.Button(root, text="Парсер", command=open_parser, width=20, height=2)
 parser_button.pack(pady=10)
+
+schedule_button = tk.Button(root, text="Расписание", command=open_schedule, width=20, height=2)
+schedule_button.pack(pady=10)
 
 def start_parsing():
     students_username = username_entry.get()
@@ -188,5 +201,4 @@ def start_parsing():
         driver.close()
         driver.quit()
 
-tk.Button(root, text="Запустить парсер", command=start_parsing).pack(pady=10)
 root.mainloop()
