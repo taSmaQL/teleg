@@ -18,48 +18,86 @@ option.add_argument(f'user-agent={useragent.chrome}')
 driver = webdriver.Chrome(options = option)
 url = 'https://education.vsuet.ru/login/index.php'
 
+def start_parsing():
+    students_username = username_entry.get()
+    students_password = password_entry.get()
+    test_id = id_entry.get()
+    count = int(count_entry.get())
+    matan = matan_entry.get()
+
+    print("Данные для парсинга:")
+    print(f"Логин: {students_username}")
+    print(f"Пароль: {students_password}")
+    print(f"ID теста: {test_id}")
+    print(f"Количество вопросов: {count}")
+    print(f"Есть ли картинки? {matan}")
+
+    messagebox.showinfo("Парсинг", "Парсинг запущен!\nДанные сохранены в консоль.")
+
+def open_parser():
+    parser_window = tk.Toplevel()
+    parser_window.title("Парсер вопросов")
+    parser_window.geometry("400x400")
+
+    image_path = r"C:\Users\user\Desktop\asd\123.jpg"
+    image = Image.open(image_path)
+    image = image.resize((400, 400), Image.Resampling.LANCZOS)
+    background_image = ImageTk.PhotoImage(image)
+
+    canvas = tk.Canvas(parser_window, width=400, height=400)
+    canvas.pack(fill="both", expand=True)
+    canvas.create_image(0, 0, image=background_image, anchor="nw")
+
+    def place_left(widget, y_offset, x_offset=20):
+        widget.place(x=x_offset, y=y_offset)
+
+    global username_entry, password_entry, id_entry, count_entry, matan_entry
+
+    label_login = tk.Label(parser_window, text="Логин:")
+    place_left(label_login, y_offset=50)
+    username_entry = tk.Entry(parser_window)
+    place_left(username_entry, y_offset=80)
+
+    label_password = tk.Label(parser_window, text="Пароль:")
+    place_left(label_password, y_offset=120)
+    password_entry = tk.Entry(parser_window, show='*')
+    place_left(password_entry, y_offset=150)
+
+    label_id = tk.Label(parser_window, text="ID теста:")
+    place_left(label_id, y_offset=190)
+    id_entry = tk.Entry(parser_window)
+    place_left(id_entry, y_offset=220)
+
+    label_count = tk.Label(parser_window, text="Количество вопросов:")
+    place_left(label_count, y_offset=260)
+    count_entry = tk.Entry(parser_window)
+    place_left(count_entry, y_offset=290)
+
+    label_images = tk.Label(parser_window, text="Есть ли картинки? (Да/Нет):")
+    place_left(label_images, y_offset=330)
+    matan_entry = tk.Entry(parser_window)
+    place_left(matan_entry, y_offset=360)
+
+    start_button = tk.Button(parser_window, text="Начать парсинг", command=start_parsing, width=15, height=2)
+    place_left(start_button, y_offset=400, x_offset=150)
+
+    parser_window.mainloop()
+
+def auth_fun():
+    messagebox.showinfo("Авторизация", "Добро пожаловать! \n\nПароль: 12345\n(шутка)")
+
 root = tk.Tk()
-root.title("Парсер вопросов")
-root.geometry("400x400")
+root.title("Главное меню")
+root.geometry("300x200")
 
-# Загружаем изображение
-image_path = r"C:\Users\user\Desktop\asd\123.jpg"
-image = Image.open(image_path)
-image = image.resize((400, 400), Image.Resampling.LANCZOS)
-background_image = ImageTk.PhotoImage(image)
+label = tk.Label(root, text="Выберите действие:", font=("Helvetica", 14))
+label.pack(pady=20)
 
-canvas = tk.Canvas(root, width=400, height=400)
-canvas.pack(fill="both", expand=True)
-canvas.create_image(0, 0, image=background_image, anchor="nw")
+auth_button = tk.Button(root, text="Авторизация", command=auth_fun, width=20, height=2)
+auth_button.pack(pady=10)
 
-def place_left(widget, y_offset, x_offset=20):
-    widget.place(x=x_offset, y=y_offset)
-
-
-label_login = tk.Label(root, text="Логин:")
-place_left(label_login, y_offset=50)
-username_entry = tk.Entry(root)
-place_left(username_entry, y_offset=80)
-
-label_password = tk.Label(root, text="Пароль:")
-place_left(label_password, y_offset=120)
-password_entry = tk.Entry(root, show='*')
-place_left(password_entry, y_offset=150)
-
-label_id = tk.Label(root, text="ID теста:")
-place_left(label_id, y_offset=190)
-id_entry = tk.Entry(root)
-place_left(id_entry, y_offset=220)
-
-label_count = tk.Label(root, text="Количество вопросов:")
-place_left(label_count, y_offset=260)
-count_entry = tk.Entry(root)
-place_left(count_entry, y_offset=290)
-
-label_images = tk.Label(root, text="Есть ли картинки? (Да/Нет):")
-place_left(label_images, y_offset=330)
-matan_entry = tk.Entry(root)
-place_left(matan_entry, y_offset=360)
+parser_button = tk.Button(root, text="Парсер", command=open_parser, width=20, height=2)
+parser_button.pack(pady=10)
 
 def start_parsing():
     students_username = username_entry.get()
@@ -108,7 +146,6 @@ def start_parsing():
         driver.switch_to.window(driver.window_handles[1])
         driver.maximize_window()
         time.sleep(2)
-        # Копируем:
         answers = {}
         if matan in ['Да', 'ДА', 'да']:
             for i in range(1, count + 1):
