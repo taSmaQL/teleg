@@ -1,8 +1,3 @@
-'''
-                                Важно!
-Данный код был разработан исключительно с целью образовательного ознакомления. 
-    Он не предназначен для корыстного использования или коммерческих целей. 
-'''
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
@@ -15,6 +10,7 @@ import tkinter as tk
 from tkinter import messagebox
 import time
 import requests
+from PIL import Image, ImageTk
 from fake_useragent import UserAgent
 useragent = UserAgent()
 option = webdriver.ChromeOptions()
@@ -26,34 +22,44 @@ root = tk.Tk()
 root.title("Парсер вопросов")
 root.geometry("400x400")
 
-label_frame = tk.Frame(root)
-label_frame.pack(pady=20)
+# Загружаем изображение
+image_path = r"C:\Users\user\Desktop\asd\123.jpg"
+image = Image.open(image_path)
+image = image.resize((400, 400), Image.Resampling.LANCZOS)
+background_image = ImageTk.PhotoImage(image)
 
-background_label = tk.Label(label_frame, text="У-242 ONE LOVE ", font=("Helvetica", 16), fg="black")
-background_label.pack(side=tk.LEFT)
+canvas = tk.Canvas(root, width=400, height=400)
+canvas.pack(fill="both", expand=True)
+canvas.create_image(0, 0, image=background_image, anchor="nw")
 
-heart_label = tk.Label(label_frame, text="<3", font=("Helvetica", 16), fg="red")
-heart_label.pack(side=tk.LEFT)
+def place_left(widget, y_offset, x_offset=20):
+    widget.place(x=x_offset, y=y_offset)
 
-tk.Label(root, text="Логин:").pack()
+
+label_login = tk.Label(root, text="Логин:")
+place_left(label_login, y_offset=50)
 username_entry = tk.Entry(root)
-username_entry.pack()
+place_left(username_entry, y_offset=80)
 
-tk.Label(root, text="Пароль:").pack()
+label_password = tk.Label(root, text="Пароль:")
+place_left(label_password, y_offset=120)
 password_entry = tk.Entry(root, show='*')
-password_entry.pack()
+place_left(password_entry, y_offset=150)
 
-tk.Label(root, text="ID теста:").pack()
+label_id = tk.Label(root, text="ID теста:")
+place_left(label_id, y_offset=190)
 id_entry = tk.Entry(root)
-id_entry.pack()
+place_left(id_entry, y_offset=220)
 
-tk.Label(root, text="Количество вопросов:").pack()
+label_count = tk.Label(root, text="Количество вопросов:")
+place_left(label_count, y_offset=260)
 count_entry = tk.Entry(root)
-count_entry.pack()
+place_left(count_entry, y_offset=290)
 
-tk.Label(root, text="Есть ли картинки? (Да/Нет):").pack()
+label_images = tk.Label(root, text="Есть ли картинки? (Да/Нет):")
+place_left(label_images, y_offset=330)
 matan_entry = tk.Entry(root)
-matan_entry.pack()
+place_left(matan_entry, y_offset=360)
 
 def start_parsing():
     students_username = username_entry.get()
@@ -107,6 +113,7 @@ def start_parsing():
         if matan in ['Да', 'ДА', 'да']:
             for i in range(1, count + 1):
                 sigma = driver.find_element(By.XPATH,f"(//span[@class='thispageholder'])[{i}]").click()
+                time.sleep(2)
                 test_element = driver.find_element(By.XPATH, "//div[@class='formulation clearfix']")
                 images = test_element.screenshot_as_png
                 filename = f'image_{i}.png'
@@ -140,6 +147,7 @@ def start_parsing():
     except Exception as ex:
         print(ex)
     finally: 
+        time.sleep(3)
         driver.close()
         driver.quit()
 
