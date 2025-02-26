@@ -18,6 +18,11 @@ option.add_argument(f'user-agent={useragent.chrome}')
 driver = webdriver.Chrome(options = option)
 url = 'https://education.vsuet.ru/login/index.php'
 
+'''
+task: Если существует "блок", то распарсить на отдельные вопросы. Если вылезают
+сколько-то вопросов одновременно, то парсер засчитывает как один
+'''
+
 def start_parsing():
     students_username = username_entry.get()
     students_password = password_entry.get()
